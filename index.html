@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latihan Irodori — Pink &amp; Kuning (60 Soal)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .container {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-width: 760px;
+    width: 100%;
+    padding: 30px;
+    position: relative;
+  }
+  h1 { font-size: 1.4em; color: #333; margin-bottom: 6px; text-align: center; }
+  .subtitle { text-align: center; color: #888; font-size: 0.85em; margin-bottom: 20px; }
+
+  .menu { text-align: center; }
+  .menu .btn { margin-top: 12px; }
+  .menu-desc { color: #666; font-size: 0.95em; margin-bottom: 8px; line-height: 1.6; }
+  .badge-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 16px 0; }
+  .badge {
+    background: #f0f2ff; color: #667eea; padding: 6px 14px; border-radius: 20px;
+    font-size: 0.85em; font-weight: 600;
+  }
+
+  /* === Penjelasan Mode di Menu === */
+  .mode-explanation {
+    background: #f8f9ff;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 16px 0;
+    text-align: left;
+    font-size: 0.88em;
+    line-height: 1.65;
+    color: #444;
+    border-left: 4px solid #667eea;
+  }
+  .mode-explanation > strong {
+    color: #667eea;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+  }
+  .mode-explanation .mode-item {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #dde1ff;
+  }
+  .mode-explanation .mode-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .mode-explanation .mode-item strong { color: #333; }
+  .mode-explanation .mode-item small { display: block; color: #666; margin-top: 3px; }
+
+  .progress-bar {
+    height: 8px; background: #eee; border-radius: 10px; overflow: hidden; margin-bottom: 20px;
+  }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, #667eea, #764ba2);
+    width: 0%; transition: width 0.3s ease;
+  }
+  .info-row {
+    display: flex; justify-content: space-between; font-size: 0.85em;
+    color: #666; margin-bottom: 12px; font-weight: 600;
+  }
+  .timer-box {
+    background: #fff3cd; color: #856404; padding: 4px 12px; border-radius: 20px;
+    font-weight: 700; font-size: 0.85em; transition: all 0.2s;
+  }
+  .timer-box.warning { background: #f8d7da; color: #721c24; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
+
+  .question {
+    font-size: 1.05em; color: #222; margin-bottom: 20px; line-height: 1.75;
+    min-height: 60px;
+    white-space: pre-line;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .option {
+    padding: 14px 18px; border: 2px solid #e0e0e0; border-radius: 12px;
+    cursor: pointer; transition: all 0.2s; font-size: 1em; color: #333;
+    background: #fafafa; text-align: left; display: flex; align-items: center; gap: 10px;
+  }
+  .option:hover:not(.disabled) { border-color: #667eea; background: #f0f2ff; transform: translateX(4px); }
+  .option .label { font-weight: 700; color: #667eea; min-width: 22px; }
+  .option.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+  .option.correct .label { color: #28a745; }
+  .option.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+  .option.wrong .label { color: #dc3545; }
+  .option.disabled { cursor: not-allowed; }
+  .option.selected { border-color: #667eea; background: #e8ecff; }
+
+  .feedback {
+    padding: 12px 14px; border-radius: 10px; font-weight: 600;
+    margin-bottom: 15px; display: none; text-align: left; line-height: 1.6;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct { background: #d4edda; color: #155724; }
+  .feedback.wrong { background: #f8d7da; color: #721c24; }
+  .feedback small { display: block; margin-top: 6px; font-weight: 400; opacity: 0.85; }
+
+  .btn {
+    width: 100%; padding: 14px; border: none; border-radius: 12px;
+    font-size: 1em; font-weight: 700; cursor: pointer; transition: all 0.2s;
+    background: linear-gradient(90deg, #667eea, #764ba2); color: #fff;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.4); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn.secondary { background: #eee; color: #333; }
+  .btn.secondary:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+  .btn-row { display: flex; gap: 10px; }
+
+  .result-screen { text-align: center; display: none; }
+  .result-screen.show { display: block; }
+  .score-big {
+    font-size: 3.5em; font-weight: 800;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin: 10px 0;
+  }
+  .result-detail { color: #666; margin-bottom: 20px; font-size: 1.05em; line-height: 1.6; }
+  .review-list { text-align: left; margin-top: 20px; max-height: 420px; overflow-y: auto; }
+  .review-item { padding: 12px; border-bottom: 1px solid #eee; font-size: 0.9em; }
+  .review-item.correct { border-left: 4px solid #28a745; }
+  .review-item.wrong { border-left: 4px solid #dc3545; }
+  .review-q { font-weight: 600; margin-bottom: 4px; color: #333; white-space: pre-line; }
+  .review-a { color: #666; font-size: 0.9em; }
+  .review-a .ok { color: #28a745; font-weight: 700; }
+  .review-a .no { color: #dc3545; font-weight: 700; }
+  .review-p {
+    color: #444; margin-top: 6px; font-size: 0.88em;
+    background: #f8f9ff; padding: 8px 10px; border-radius: 6px;
+    border-left: 3px solid #667eea;
+  }
+
+  .lb-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.92em; }
+  .lb-table th, .lb-table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #eee; }
+  .lb-table th { background: #f0f2ff; color: #667eea; font-weight: 700; }
+  .lb-table tr:nth-child(1) td { font-weight: 700; color: #b8860b; }
+  .lb-empty { color: #999; text-align: center; padding: 30px; font-style: italic; }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 500px) {
+    .container { padding: 20px; }
+    h1 { font-size: 1.2em; }
+    .question { font-size: 1em; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div id="menu-screen" class="menu">
+    <h1>🇯🇵 Latihan Irodori Pink &amp; Kuning</h1>
+    <p class="subtitle" id="menu-subtitle">60 Soal • Referensi IRODORI</p>
+    <div class="badge-row">
+      <span class="badge" id="timer-badge">⏱️ Min 30s</span>
+      <span class="badge">🔀 Soal Acak</span>
+      <span class="badge">🏆 Leaderboard</span>
+      <span class="badge">🔊 Suara</span>
+    </div>
+    <p class="menu-desc">Pilih mode di bawah ini:</p>
+
+    <!-- === PENJELASAN MODE === -->
+    <div class="mode-explanation">
+      <strong>📖 Penjelasan Mode Latihan &amp; Ujian</strong>
+      <div class="mode-item">
+        <strong>🎯 Mode Latihan (Feedback Langsung)</strong>
+        <small>Setelah memilih jawaban, kamu langsung melihat apakah benar (✅) atau salah (❌), plus <b>penjelasan singkat (💡)</b> di bawahnya. Cocok untuk <b>belajar sambil memahami pola</b>, kesalahan, dan tata bahasa. Setiap soal punya tombol "Lanjut" untuk ke soal berikutnya.</small>
+      </div>
+      <div class="mode-item">
+        <strong>📊 Mode Ujian (Hasil di Akhir)</strong>
+        <small>Jawaban <b>tidak</b> diberi feedback selama quiz. Skor dan <b>review lengkap beserta penjelasan tiap soal</b> baru muncul setelah semua soal selesai. Cocok untuk <b>mengukur pemahaman</b> secara objektif.</small>
+      </div>
+      <div class="mode-item">
+        <strong>🏆 Leaderboard</strong>
+        <small>Skor terbaik (10 besar) tersimpan otomatis di browser ini. Bandingkan hasil antar percobaan!</small>
+      </div>
+    </div>
+
+    <button class="btn" id="start-normal-btn">🎯 Mode Latihan (Feedback Langsung)</button>
+    <button class="btn secondary" id="start-exam-btn">📊 Mode Ujian (Hasil di Akhir)</button>
+    <button class="btn secondary" id="show-lb-btn">🏆 Lihat Leaderboard</button>
+  </div>
+
+  <div id="quiz-screen" class="hidden">
+    <div class="info-row">
+      <span id="progress-text">Soal 1 / 0</span>
+      <span id="timer-display" class="timer-box">⏱️ 30s</span>
+      <span id="score-text">Skor: 0</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="question" id="question-text"></div>
+    <div class="options" id="options-container"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="btn" id="next-btn" disabled>Lanjut →</button>
+  </div>
+
+  <div id="result-screen" class="result-screen">
+    <h1>🎉 Selesai!</h1>
+    <div class="score-big" id="final-score">0</div>
+    <p class="result-detail" id="final-detail"></p>
+    <div class="review-list" id="review-list"></div>
+    <div class="btn-row" style="margin-top:20px;">
+      <button class="btn" id="restart-btn">🔄 Ulangi Quiz</button>
+      <button class="btn secondary" id="back-menu-btn">🏠 Menu</button>
+    </div>
+  </div>
+
+  <div id="lb-screen" class="hidden">
+    <h1>🏆 Leaderboard</h1>
+    <p class="subtitle">Top 10 skor terbaik (tersimpan di browser ini)</p>
+    <div id="lb-content"></div>
+    <div class="btn-row" style="margin-top:20px;">
+      <button class="btn secondary" id="clear-lb-btn">🗑️ Hapus Semua</button>
+      <button class="btn" id="lb-back-btn">🏠 Menu</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// ====== KONFIGURASI ======
+// ============================================================
+const CONFIG = {
+  minTimePerQuestion: 30,
+  maxTimePerQuestion: 120,
+  timePerQuestion: 0,
+  shuffleQuestions: true,
+  shuffleOptions: false,
+  soundEnabled: true,
+  leaderboardKey: 'irodori_60_leaderboard_v1',
+  maxLeaderboard: 10,
+  examModeDefault: false
+};
+
+// ============================================================
+// ====== 60 SOAL LENGKAP + PENJELASAN ======
+// Struktur: q=pertanyaan, o=opsi[], a=index benar (0-3),
+//           p=pembahasan, t=waktu detik (opsional)
+// ============================================================
+const QUESTIONS = [
+  // ---------- 読解 (Dokkai) 1–10 ----------
+  {
+    q: "つぎの 文を 読んで、質問に 答えて ください。\n\nわたしは 田中さんと いっしょに 会社へ 行きます。田中さんは わたしの 先輩です。毎朝、8時に 駅で 会います。電車の中で よく 話します。\n\n質問：田中さんは どんな 人ですか。",
+    o: ["会社の 社長です。", "わたしの 先輩です。", "駅の 店員です。", "電車の 運転手です。"],
+    a: 1, t: 60,
+    p: "「田中さんは わたしの 先輩です」と 文中に はっきり 書いて あります。ほかの 選択肢は 本文に ない 情報です。"
+  },
+  {
+    q: "つぎの メモを 読んで、質問に 答えて ください。\n\n明日の 会議は 10時からです。会議室は 3階の 302号室です。資料を 5部 コピーして 持ってきて ください。\n\n質問：会議の ために 何を 持って 行きますか。",
+    o: ["お弁当", "資料", "名刺", "ノートパソコン"],
+    a: 1, t: 60,
+    p: "「資料を5部コピーして持ってきてください」と 指示が あります。したがって 会議には 資料を 持って 行きます。"
+  },
+  {
+    q: "つぎの 文を 読んで、質問に 答えて ください。\n\nきのう、友だちと 映画を 見ました。映画は とても おもしろかったです。その あと、レストランで 晩ごはんを 食べました。カレーは 少し からかったですが、おいしかったです。\n\n質問：きのう、何を しましたか。",
+    o: ["映画だけ 見ました。", "映画を 見て、それから ごはんを 食べました。", "ごはんだけ 食べました。", "家で 休みました。"],
+    a: 1, t: 60,
+    p: "「映画を見ました」→「そのあと、レストランで晩ごはんを食べました」と 順番に 書いて あります。だから 両方 した ことが 分かります。"
+  },
+  {
+    q: "つぎの 案内を 読んで、質問に 答えて ください。\n\n図書館は 9時から 19時までです。月曜日は 休みです。本は 5冊まで 借りる ことが できます。返す ときは、カウンターに 出して ください。\n\n質問：図書館で 本を 何冊 借りる ことが できますか。",
+    o: ["3冊", "5冊", "9冊", "19冊"],
+    a: 1, t: 60,
+    p: "「本は5冊まで借りることができます」と あります。「〜まで」は 上限を 表します。"
+  },
+  {
+    q: "つぎの 文を 読んで、質問に 答えて ください。\n\nわたしの 家族は 4人です。父と 母と 妹と わたしです。父は 銀行で 働いて います。母は 看護師です。妹は 大学生で、日本語を 勉強して います。わたしは 会社員です。\n\n質問：妹は 何を して いますか。",
+    o: ["銀行で 働いて います。", "看護師です。", "大学生で、日本語を 勉強して います。", "会社員です。"],
+    a: 2, t: 60,
+    p: "「妹は大学生で、日本語を勉強しています」と あります。ほかの 選択肢は 父・母・自分に ついての 説明です。"
+  },
+  {
+    q: "つぎの メールを 読んで、質問に 答えて ください。\n\n佐藤さん、あしたの パーティーは 6時からです。場所は さくらホールです。駅から 歩いて 5分です。何か 食べ物を 持って 来て ください。飲み物は こちらで 用意します。\n田中\n\n質問：パーティーで 何を 持って 行きますか。",
+    o: ["飲み物", "食べ物", "お金", "椅子"],
+    a: 1, t: 60,
+    p: "「何か食べ物を持って来てください」→ 食べ物を 持って 行きます。飲み物は「こちらで用意します」と 書いて あります。"
+  },
+  {
+    q: "つぎの 文を 読んで、質問に 答えて ください。\n\nわたしは 毎朝 7時に 起きます。顔を 洗って、朝ごはんを 食べます。それから、歯を みがいて、着替えます。8時に 家を 出て、駅まで 歩いて 行きます。電車で 30分 会社まで 行きます。\n\n質問：会社まで 何で 行きますか。",
+    o: ["バス", "自転車", "電車", "車"],
+    a: 2, t: 60,
+    p: "「電車で30分会社まで行きます」と あります。移動手段を 表す「で」が ポイントです。"
+  },
+  {
+    q: "つぎの 貼り紙を 読んで、質問に 答えて ください。\n\n【お知らせ】\n明日、9時から 12時まで エレベーターを 使う ことが できません。階段を 使って ください。ご迷惑を おかけします。\n\n質問：明日の 午前中、何を 使う ことが できませんか。",
+    o: ["階段", "エレベーター", "トイレ", "電話"],
+    a: 1, t: 60,
+    p: "「エレベーターを使うことができません」→ エレベーターが 使えません。代わりに「階段を使ってください」と あります。"
+  },
+  {
+    q: "つぎの 文を 読んで、質問に 答えて ください。\n\nわたしは 日本語を 勉強して います。毎日 1時間 勉強します。漢字は 難しいですが、おもしろいです。日本の ドラマを 見るのも 好きです。でも、まだ あまり 話せません。もっと 練習したいです。\n\n質問：この人が もっと したい ことは 何ですか。",
+    o: ["ドラマを 見る こと", "漢字を 書く こと", "日本語を 話す 練習", "日本へ 行く こと"],
+    a: 2, t: 60,
+    p: "「まだあまり話せません。もっと練習したいです」→ 会話の 練習を もっと したい、と 言っています。"
+  },
+  {
+    q: "つぎの 文を 読んで、質問に 答えて ください。\n\nわたしの 町には 大きな 公園が あります。公園の 中に 池が あって、魚が たくさん います。休みの 日は、よく 公園へ 散歩に 行きます。子どもと 一緒に 行く ことも あります。春は 桜が きれいです。\n\n質問：この人は 休みの 日に よく 何を しますか。",
+    o: ["買い物に 行きます。", "公園へ 散歩に 行きます。", "映画を 見ます。", "魚を 釣ります。"],
+    a: 1, t: 60,
+    p: "「休みの日は、よく公園へ散歩に行きます」と はっきり 書いて あります。"
+  },
+
+  // ---------- 表現 (Hyougen) 11–40 ----------
+  {
+    q: "クリーニング店の 前に います。店の 人に 衣類を 出したいです。何と 言いますか。",
+    o: ["これ、おねがいします。", "これ、ください。", "これ、たべます。", "これ、いれます。"],
+    a: 0,
+    p: "物を 手渡して 作業や 対応を 頼む ときは「〜をおねがいします」を 使います。「ください」は 物を もらう とき、「たべます／いれます」は ここでは 不自然です。"
+  },
+  {
+    q: "レストランで 店員が「ご注文は お決まりですか」と 聞いて います。注文する ときの 言い方として 正しい ものは どれですか。",
+    o: ["お会計を お願いします。", "これに します。", "予約を お願いします。", "禁煙ですか。"],
+    a: 1,
+    p: "「〜にします」は メニューを 決めた ときの 定番表現です。A は 支払い、C は 予約、D は 席の 確認で、注文の 表現では ありません。"
+  },
+  {
+    q: "病院の 受付で、初めて 来た ことを 伝えたいです。何と 言いますか。",
+    o: ["はじめてです。", "お世話に なります。", "おかげさまで。", "失礼します。"],
+    a: 0,
+    p: "初めて 来た ことを 伝える ときは「はじめてです」と 言います。B は ビジネスの あいさつ、C は お礼、D は 入退室の あいさつです。"
+  },
+  {
+    q: "電車の 中で、降りたい 人が います。自分が 降りる 場所を 伝える とき、何と 言いますか。",
+    o: ["つぎ、おります。", "つぎ、のります。", "つぎ、まがります。", "つぎ、とまります。"],
+    a: 0,
+    p: "「つぎ、おります」は「次の 駅で 降ります」という 意味で、まわりの 人に 降りる ことを 伝える 表現です。"
+  },
+  {
+    q: "コンビニで 袋が 必要か 聞かれました。袋は いらないと 伝えたいです。何と 言いますか。",
+    o: ["ふくろ、ください。", "ふくろは、いいです。", "ふくろ、おねがいします。", "ふくろ、ありますか。"],
+    a: 1,
+    p: "いらない ときは「〜はいいです」で やわらかく 断ります。A・C・D は すべて 袋を 求める 表現に なって しまいます。"
+  },
+  {
+    q: "会社で 上司に 書類を 渡しながら、確認して ほしいと 伝えます。何と 言いますか。",
+    o: ["見ても いいですか。", "見て ください。", "見て いただいても いいですか。", "見て あげます。"],
+    a: 2,
+    p: "上司に 頼む ときは「〜ていただけませんか／〜ていただいてもいいですか」の ていねいな 形を 使います。B は 命令的、D は 意味が 逆です。"
+  },
+  {
+    q: "友だちの 家を 出る とき、お世話に なった お礼を 言いたいです。何と 言いますか。",
+    o: ["おじゃましました。", "いってきます。", "おかえりなさい。", "いらっしゃい。"],
+    a: 0,
+    p: "帰る ときは「おじゃましました」。入る ときは「おじゃまします」です。B は 自分の 家を 出る とき、C・D は 迎える 側の 言葉です。"
+  },
+  {
+    q: "食堂で、食べ終わった 後に 店員を 呼んで 支払いたいです。何と 言いますか。",
+    o: ["ごちそうさまでした。", "おかあさん。", "おかいけい、おねがいします。", "いただきます。"],
+    a: 2,
+    p: "支払う ときは「お会計、お願いします」と 言います。A は 食べ終わった お礼、D は 食べる 前の 言葉です。"
+  },
+  {
+    q: "郵便局で、この 荷物を 外国に 送りたいです。窓口で 何と 言いますか。",
+    o: ["これ、どこですか。", "これ、いくらですか。", "これ、外国へ おねがいします。", "これ、だれの ですか。"],
+    a: 2,
+    p: "「〜へおねがいします」で 送り先を 伝えます。「これ、外国へおねがいします」＝ これを 外国へ 送って ください、という 意味です。"
+  },
+  {
+    q: "友だちと 待ち合わせを して います。相手が まだ 来ていないので、電話で 今 どこに いるか 聞きたいです。何と 言いますか。",
+    o: ["いま、どこに いますか。", "いま、だれと いますか。", "いま、なにを しますか。", "いま、どうですか。"],
+    a: 0,
+    p: "場所を 聞く ときは「どこに いますか」です。B は だれと、C は 何を、D は どんな 様子か、を 聞く 表現です。"
+  },
+  {
+    q: "不動産屋で 部屋を 探して います。「駅から 近い」と 言いたいです。正しい ものは どれですか。",
+    o: ["えきから ちかいです。", "えきから とおいです。", "えきから はやいです。", "えきから おそいです。"],
+    a: 0,
+    p: "「近い（ちかい）」は 距離が 短い ことを 表します。反対語は「遠い（とおい）」。C・D は 速い／遅いで、距離には 使いません。"
+  },
+  {
+    q: "職場で、同僚に コピーを 頼みたいです。ていねいな 依頼として 正しい ものは どれですか。",
+    o: ["コピーして。", "コピーしなさい。", "コピーして いただけませんか。", "コピーしても いいですか。"],
+    a: 2,
+    p: "「〜ていただけませんか」は ていねいな 依頼の 表現です。A は カジュアル、B は 命令、D は「自分が しても いいか」を 聞く 表現です。"
+  },
+  {
+    q: "旅行の 写真を 見ながら、友だちに「この 写真、だれですか」と 聞かれました。写って いるのは 自分の 兄です。何と 答えますか。",
+    o: ["あにです。", "おとうとです。", "ちちです。", "ははです。"],
+    a: 0,
+    p: "兄（あに）は 自分の 上の 兄弟（お兄さん）を 表す 言葉です。弟（おとうと）は 下の 兄弟、父（ちち）は 父親、母（はは）は 母親です。"
+  },
+  {
+    q: "スーパーで、牛乳を 探して います。店員に 場所を 聞く とき、何と 言いますか。",
+    o: ["ぎゅうにゅうは どこですか。", "ぎゅうにゅうは だれですか。", "ぎゅうにゅうは いつですか。", "ぎゅうにゅうは なんですか。"],
+    a: 0,
+    p: "場所を 聞く ときは「どこ」を 使います。B は だれ、C は いつ、D は なん（何）で、場所の 質問には なりません。"
+  },
+  {
+    q: "日本の 家で、玄関で 靴を 脱ぐ ように 言われました。何と 言われた 可能性が 高いですか。",
+    o: ["くつを はいて ください。", "くつを ぬいで ください。", "くつを あらって ください。", "くつを かって ください。"],
+    a: 1,
+    p: "「脱ぐ（ぬぐ）」は 身に つけて いる ものを 取る こと。日本の 家では 玄関で「くつを ぬいで ください」と 言われます。"
+  },
+  {
+    q: "友だちに「いっしょに 帰りませんか」と 誘われました。断る とき、やわらかい 言い方として 適切な ものは どれですか。",
+    o: ["いやです。", "だめです。", "今日は ちょっと…。", "かえりません。"],
+    a: 2,
+    p: "「〜はちょっと…」は 直接「いや」と 言わずに やわらかく 断る 表現です。A・B・D は 強すぎて 失礼に なります。"
+  },
+  {
+    q: "会議で、自分の 意見を 言う 前に「すみません」と 声を かける とき、最も 自然な 表現は どれですか。",
+    o: ["すみません、ちょっと いいですか。", "すみません、いやですか。", "すみません、だめですか。", "すみません、いりますか。"],
+    a: 0,
+    p: "「ちょっと いいですか」は「少し 時間を もらえますか」という 意味で、会議や 打ち合わせで 話しかける ときの 定番表現です。"
+  },
+  {
+    q: "レストランで 店員が「お会計は ご一緒ですか、別々ですか」と 聞いて います。別々に 払いたい とき、何と 言いますか。",
+    o: ["いっしょです。", "べつべつで おねがいします。", "ふたりです。", "おかいけいです。"],
+    a: 1,
+    p: "「別々（べつべつ）で お願いします」＝ 一人ずつ 払います、という 意味です。「一緒（いっしょ）」は まとめて 払う ときです。"
+  },
+  {
+    q: "職場で 上司に「明日、少し 早く 来て もらえますか」と 頼まれました。引き受ける ときの 返事として 最も 適切な ものは どれですか。",
+    o: ["はい、わかりました。", "はい、いやです。", "はい、できません。", "はい、いりません。"],
+    a: 0,
+    p: "引き受ける ときは「はい、わかりました」が 適切です。B・C・D は すべて 依頼を 断る 意味に なってしまいます。"
+  },
+  {
+    q: "友だちの 家に 泊めて もらう とき、最初に 言う あいさつとして 適切な ものは どれですか。",
+    o: ["おじゃまします。", "おじゃましました。", "いってきます。", "おかえりなさい。"],
+    a: 0,
+    p: "家に 入る ときは「おじゃまします」、帰る ときは「おじゃましました」です。C は 自分の 家を 出る とき、D は 迎える 側の 言葉です。"
+  },
+  {
+    q: "体調が 悪い 同僚に「大丈夫ですか」と 聞きました。相手は「少し 熱が あります」と 言って います。この 後、最も 自然な 言葉かけは どれですか。",
+    o: ["おめでとう ございます。", "おだいじに。", "おかげさまで。", "ごちそうさま。"],
+    a: 1,
+    p: "病気や 体調不良の 人に かける 言葉は「おだいじに」です。A は お祝い、C は お礼、D は 食事の 後 の あいさつです。"
+  },
+  {
+    q: "店で 商品の 値段を 聞きたいです。「これ、いくらですか」と 同じ 意味の ていねいな 言い方は どれですか。",
+    o: ["これ、おいくらですか。", "これ、どちらですか。", "これ、いつですか。", "これ、なにですか。"],
+    a: 0,
+    p: "「おいくらですか」は「いくらですか」の ていねいな 形で、値段を 聞く ときの 表現です。"
+  },
+  {
+    q: "エレベーターで 先に 乗る 人に「どうぞ」と 言われました。何と 言って 譲って もらいますか。",
+    o: ["どうも すみません。", "どうぞ どうぞ。", "いやです。", "だめです。"],
+    a: 0,
+    p: "譲って もらった ときは「どうも すみません」や「ありがとう ございます」と 言います。「どうぞ どうぞ」は 自分が 先に 譲る ときの 言葉です。"
+  },
+  {
+    q: "会議が 終わり、退出する ときの あいさつとして 適切な ものは どれですか。",
+    o: ["お先に 失礼します。", "おかえりなさい。", "いらっしゃいませ。", "ごちそうさまでした。"],
+    a: 0,
+    p: "先に 退出する ときは「お先に 失礼します」と 言います。B・C は 迎える 側の 言葉、D は 食事の 後 の あいさつです。"
+  },
+  {
+    q: "パーティーで 初めて 会った 人に 自己紹介する とき、最初に 言う 表現として 自然な ものは どれですか。",
+    o: ["はじめまして。", "おひさしぶりです。", "おじゃまします。", "おかげさまで。"],
+    a: 0,
+    p: "初対面の あいさつは「はじめまして」です。B は 久しぶりに 会う 人、C は 家に 入る とき、D は お礼の 表現です。"
+  },
+  {
+    q: "友だちに「日曜日、何を しますか」と 聞かれました。予定が ない とき、どう 答えますか。",
+    o: ["べつに 何も しません。", "何か します。", "どこかへ 行きます。", "だれかと 会います。"],
+    a: 0,
+    p: "予定が ない ときは「別に 何も しません」と 答えます。「別に」は「特に」と 同じ ような 意味で、否定文と 一緒に よく 使います。"
+  },
+  {
+    q: "電車が 遅れて いる アナウンスを 聞きました。「電車が 少し 遅れて います」と 言って います。利用者として 最も 適切な 行動は どれですか。",
+    o: ["すぐに 乗る。", "少し 待つ。", "走る。", "怒る。"],
+    a: 1,
+    p: "「遅れています」＝ 電車が 予定より 遅れて いる 状態。利用者は 少し 待つのが 自然な 行動です。"
+  },
+  {
+    q: "職場で「お先に 失礼します」と 言われました。残っている 人として 返す 言葉は どれですか。",
+    o: ["お疲れさまでした。", "いらっしゃいませ。", "かしこまりました。", "おねがいします。"],
+    a: 0,
+    p: "先に 帰る 人には「お疲れさまでした」と 返します。「お疲れさま」は 労いの 気持ちを 表す 言葉です。"
+  },
+  {
+    q: "デパートで「少々 お待ち ください」と 言われました。この 意味として 正しい ものは どれですか。",
+    o: ["少し 待って ください。", "ここで 待たないで ください。", "すぐ 来て ください。", "帰って ください。"],
+    a: 0,
+    p: "「少々（しょうしょう）お待ちください」は「少し 待って ください」の ていねいな 形です。"
+  },
+  {
+    q: "日本の 職場で、休みたい ときに 使う ていねいな 表現は どれですか。",
+    o: ["休みたいです。", "休んでも いいですか。", "休ませて いただけませんか。", "休みます。"],
+    a: 2,
+    p: "「〜させて いただけませんか」は 許可を 求める 最も ていねいな 形で、上司に 対して 使えます。A は 願望、B は やや カジュアル、D は 断定です。"
+  },
+
+  // ---------- 漢字と語彙 (Kanji & Kotoba) 41–60 ----------
+  {
+    q: "「私の 町は、海の 近くに あります。」の「海」の 読み方として 正しい ものは どれですか。",
+    o: ["うめ", "うみ", "うま", "かい"],
+    a: 1,
+    p: "海（うみ）＝ laut。「うめ」は 梅（prem）、「うま」は 馬（kuda）です。「かい」は 音読みで、海水浴（かいすいよく）など 熟語で 使います。"
+  },
+  {
+    q: "「この 島には、大きい 森が あります。」の「森」の 読み方として 正しい ものは どれですか。",
+    o: ["もり", "もる", "しん", "はやし"],
+    a: 0,
+    p: "森（もり）＝ hutan。「はやし」は 林（はやし）＝ hutan kecil/rimbun です。"
+  },
+  {
+    q: "「ここは、有名な 観光地で、日本からの お客さんが 多いです。」の「観光地」の 読み方として 正しい ものは どれですか。",
+    o: ["かんこうち", "かこうち", "かんこち", "かんこうじ"],
+    a: 0,
+    p: "観光地（かんこうち）＝ tempat wisata。観（かん）＋光（こう）＋地（ち）です。"
+  },
+  {
+    q: "「仕事の 経験が ありますか」の「経験」の 読み方として 正しい ものは どれですか。",
+    o: ["けいけん", "けいげん", "けいこう", "けんけい"],
+    a: 0,
+    p: "経験（けいけん）＝ pengalaman。けいげん（敬言）は 別の 言葉です。"
+  },
+  {
+    q: "「最近、趣味の サークルに 入って、友だちが 増えました。」の「最近」の 読み方として 正しい ものは どれですか。",
+    o: ["さいきん", "さきん", "さいきい", "さっきん"],
+    a: 0,
+    p: "最近（さいきん）＝ belakangan ini。さい＋きん で、さいきん と 読みます。"
+  },
+  {
+    q: "「日本語の 授業は、きびしくて 大変でした。」の「授業」の 読み方として 正しい ものは どれですか。",
+    o: ["じゅぎょう", "じゅよう", "じゅうぎょう", "じゅぎょ"],
+    a: 0,
+    p: "授業（じゅぎょう）＝ pelajaran。授 の 音読みは「じゅ」で、「じゅう」では ありません。"
+  },
+  {
+    q: "「日本で 仕事を 始めた とき、文化が 違って、苦労しました。」の「苦労」の 読み方として 正しい ものは どれですか。",
+    o: ["くろう", "くうろ", "くるう", "くろ"],
+    a: 0,
+    p: "苦労（くろう）＝ kesulitan / susah payah。苦（く）＋労（ろう）です。"
+  },
+  {
+    q: "「お会計は こちらです。」の「会計」の 読み方として 正しい ものは どれですか。",
+    o: ["かいけい", "かいけ", "えかい", "あいけい"],
+    a: 0,
+    p: "会計（かいけい）＝ pembayaran / bill。レストランで「お会計お願いします」と よく 使います。"
+  },
+  {
+    q: "「ご注文は お決まりですか。」の「注文」の 読み方として 正しい ものは どれですか。",
+    o: ["ちゅうもん", "ちゅもん", "ちうもん", "ちゅうぶん"],
+    a: 0,
+    p: "注文（ちゅうもん）＝ pesanan。ちゅう＋もん です。"
+  },
+  {
+    q: "「お客様の 電話番号を お願いします。」の「電話番号」の 読み方として 正しい ものは どれですか。",
+    o: ["でんわばんごう", "てんわばんごう", "でんわばんご", "でんわばんこ"],
+    a: 0,
+    p: "電話番号（でんわばんごう）。ごう は 長音（のばす 音）なので、ばんごう と 読みます。"
+  },
+  {
+    q: "文の（　）に 合う ことばを 選んで ください。\n「今日は 自転車で 来たので、（　）んです。」",
+    o: ["食べられない", "飲めない", "話せない", "行けない"],
+    a: 1,
+    p: "自転車で 来た → お酒が 飲めない、という 文脈です。「飲めない」は 飲む の 可能形の 否定形です。"
+  },
+  {
+    q: "文の（　）に 合う ことばを 選んで ください。\n「食べられないので、（　）ください。」",
+    o: ["捨てないで", "入れないで", "飲まないで", "作らないで"],
+    a: 0,
+    p: "「〜ないでください」＝ jangan 〜。「捨てないでください」＝ jangan dibuang。「食べられない → 捨てないで」の 流れが 自然です。"
+  },
+  {
+    q: "文の（　）に 合う ことばを 選んで ください。\n「お店の 中は（　）です。」",
+    o: ["会計", "禁煙", "牛乳", "予約"],
+    a: 1,
+    p: "禁煙（きんえん）＝ dilarang merokok。「お店の中は禁煙です」＝ Di dalam toko dilarang merokok. A・C・D は この 文型に 合いません。"
+  },
+  {
+    q: "文の（　）に 合う ことばを 選んで ください。\n「レストランの（　）を しました。」",
+    o: ["予約", "自由", "ご飯", "禁煙"],
+    a: 0,
+    p: "予約（よやく）＝ reservasi。「レストランの予約をしました」＝ Saya sudah reservasi restoran. B・C・D は 「〜をしました」に 合いません。"
+  },
+  {
+    q: "文の（　）に 合う ことばを 選んで ください。\n「前は、毎日、仕事だけでしたけど、今は、趣味も（　）ように なりました。」",
+    o: ["誘える", "楽しめる", "増える", "始める"],
+    a: 1,
+    p: "「〜ようになる」＝ menjadi bisa 〜。「楽しめる」（bentuk potensial dari 楽しむ）＝ bisa menikmati. 前は 仕事だけ → 今は 趣味も 楽しめる ように なった、という 変化を 表します。"
+  },
+  {
+    q: "文の（　）に 合う ことばを 選んで ください。\n「はじめは、言ってる ことが ほとんど わかりませんでしたが、最近は、少し（　）ように なりました。」",
+    o: ["書ける", "言える", "わかる", "聞こえる"],
+    a: 2,
+    p: "「わかる ように なりました」＝ mulai bisa mengerti. 前の「わかりませんでした」と 対比して いるので、自然な 流れです。"
+  },
+  {
+    q: "文の（　）に 合う 漢字を 選んで ください。\n「何か（　）や 困った ことは ありませんか。」",
+    o: ["最近", "問題", "大変", "経験"],
+    a: 1,
+    p: "「問題（もんだい）」と「困ったこと」は 似た 意味で、並べて 使えます。「問題や困ったこと」＝ masalah atau hal yang menyulitkan. B が 最も 自然です。"
+  },
+  {
+    q: "文の（　）に 合う 漢字を 選んで ください。\n「ドラマを 見て、たくさん（　）。」",
+    o: ["困りました", "違いました", "笑いました", "苦労しました"],
+    a: 2,
+    p: "ドラマを 見て 楽しい 気持ちに なった → 「笑いました（わらいました）」＝ tertawa. A・B・D は マイナスの 意味で、ドラマの 感想には 合いません。"
+  },
+  {
+    q: "「近い」の 反対語として 正しい ものは どれですか。",
+    o: ["遠い", "高い", "長い", "暗い"],
+    a: 0,
+    p: "近い（ちかい、dekat）⇔ 遠い（とおい、jauh）。B は tinggi/mahal、C は panjang、D は gelap. "
+  },
+  {
+    q: "「明るい」の 反対語として 正しい ものは どれですか。",
+    o: ["暗い", "低い", "短い", "寒い"],
+    a: 0,
+    p: "明るい（あかるい、terang）⇔ 暗い（くらい、gelap）。B は rendah、C は pendek、D は dingin. "
+  }
+];
+
+// ============================================================
+// ====== LOGIKA QUIZ ======
+// ============================================================
+const LABELS = ['A','B','C','D'];
+let current = 0, score = 0, answered = false;
+let order = [], userAnswers = [], examMode = false;
+let timerInterval = null, timeLeft = 0;
+let currentQ = null;
+
+function getQuestionTime(q) {
+  if (q.t && q.t > 0) return Math.max(CONFIG.minTimePerQuestion, q.t);
+  if (CONFIG.timePerQuestion > 0) return CONFIG.timePerQuestion;
+  const qLen = (q.q || '').length;
+  const oLen = (q.o || []).reduce((s, o) => s + (o || '').length, 0);
+  const totalLen = qLen + oLen;
+  const extra = Math.max(0, Math.ceil((totalLen - 80) / 20));
+  return Math.min(CONFIG.minTimePerQuestion + extra, CONFIG.maxTimePerQuestion);
+}
+
+let audioCtx = null;
+function initAudio() {
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+    catch(e) { audioCtx = null; }
+  }
+}
+function playTone(freq, duration, type='sine', vol=0.15) {
+  if (!CONFIG.soundEnabled || !audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start(); osc.stop(audioCtx.currentTime + duration);
+}
+function soundCorrect() { initAudio(); playTone(660,0.12,'sine'); setTimeout(()=>playTone(880,0.18,'sine'),110); }
+function soundWrong()   { initAudio(); playTone(220,0.25,'sawtooth',0.12); }
+function soundTick()    { if (!CONFIG.soundEnabled || !audioCtx) return; playTone(1000,0.05,'square',0.05); }
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function showScreen(id) {
+  ['menu-screen','quiz-screen','result-screen','lb-screen'].forEach(s => {
+    document.getElementById(s).classList.add('hidden');
+    document.getElementById(s).classList.remove('show');
+  });
+  document.getElementById(id).classList.remove('hidden');
+  if (id === 'result-screen') document.getElementById(id).classList.add('show');
+}
+
+function startQuiz(isExam) {
+  if (QUESTIONS.length === 0) { alert('Belum ada soal.'); return; }
+  initAudio();
+  examMode = isExam;
+  current = 0; score = 0; answered = false;
+  userAnswers = [];
+  order = CONFIG.shuffleQuestions
+    ? shuffle(QUESTIONS.map((_, i) => i))
+    : QUESTIONS.map((_, i) => i);
+  showScreen('quiz-screen');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  const qIdx = order[current];
+  let q = QUESTIONS[qIdx];
+  let options = q.o.slice();
+  let correct = q.a;
+
+  if (CONFIG.shuffleOptions) {
+    const pairs = options.map((opt, i) => ({ opt, isCorrect: i === correct }));
+    const shuffled = shuffle(pairs);
+    options = shuffled.map(p => p.opt);
+    correct = shuffled.findIndex(p => p.isCorrect);
+  }
+
+  q = { ...q, o: options, a: correct };
+  currentQ = q;
+
+  document.getElementById('question-text').textContent = q.q;
+  document.getElementById('progress-text').textContent = `Soal ${current + 1} / ${order.length}`;
+  document.getElementById('score-text').textContent = `Skor: ${score}`;
+  document.getElementById('progress-fill').style.width = `${(current / order.length) * 100}%`;
+
+  const container = document.getElementById('options-container');
+  container.innerHTML = '';
+  q.o.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.innerHTML = `<span class="label">${LABELS[i]}.</span> <span>${opt}</span>`;
+    btn.onclick = () => selectAnswer(i, q);
+    container.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.innerHTML = '';
+  document.getElementById('next-btn').disabled = true;
+  document.getElementById('next-btn').textContent = current === order.length - 1 ? 'Lihat Hasil →' : 'Lanjut →';
+
+  startTimer(q);
+}
+
+function startTimer(q) {
+  clearInterval(timerInterval);
+  const timerEl = document.getElementById('timer-display');
+  const total = getQuestionTime(q);
+  if (total <= 0) { timerEl.style.display = 'none'; return; }
+  timerEl.style.display = 'inline-block';
+  timeLeft = total;
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 5 && timeLeft > 0) soundTick();
+    if (timeLeft <= 0) { clearInterval(timerInterval); timeOut(); }
+  }, 1000);
+}
+function updateTimerDisplay() {
+  const el = document.getElementById('timer-display');
+  el.textContent = `⏱️ ${timeLeft}s`;
+  el.classList.toggle('warning', timeLeft <= 5);
+}
+
+function timeOut() {
+  if (answered) return;
+  answered = true;
+  const q = currentQ;
+  const qIdx = order[current];
+  userAnswers.push({ qIdx, selected: -1, correct: q.a, isCorrect: false, timedOut: true });
+
+  document.querySelectorAll('.option').forEach((el, i) => {
+    el.classList.add('disabled');
+    if (i === q.a) el.classList.add('correct');
+  });
+
+  if (!examMode) {
+    soundWrong();
+    const fb = document.getElementById('feedback');
+    fb.className = 'feedback show wrong';
+    fb.innerHTML = `⏰ Waktu habis! Jawaban benar: <b>${LABELS[q.a]}. ${q.o[q.a]}</b>${q.p ? `<small>💡 ${q.p}</small>` : ''}`;
+  }
+  document.getElementById('next-btn').disabled = false;
+  document.getElementById('score-text').textContent = `Skor: ${score}`;
+}
+
+function selectAnswer(selected, q) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timerInterval);
+
+  const qIdx = order[current];
+  const correct = q.a;
+  const options = document.querySelectorAll('.option');
+
+  if (examMode) {
+    options.forEach((el, i) => {
+      el.classList.add('disabled');
+      if (i === selected) el.classList.add('selected');
+    });
+    if (selected === correct) score++;
+    userAnswers.push({ qIdx, selected, correct, isCorrect: selected === correct });
+  } else {
+    options.forEach((el, i) => {
+      el.classList.add('disabled');
+      if (i === correct) el.classList.add('correct');
+      if (i === selected && i !== correct) el.classList.add('wrong');
+    });
+    const isCorrect = selected === correct;
+    if (isCorrect) { score++; soundCorrect(); } else soundWrong();
+    userAnswers.push({ qIdx, selected, correct, isCorrect });
+
+    const fb = document.getElementById('feedback');
+    fb.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
+    fb.innerHTML = isCorrect
+      ? `✅ Benar!${q.p ? `<small>💡 ${q.p}</small>` : ''}`
+      : `❌ Salah. Jawaban benar: <b>${LABELS[correct]}. ${q.o[correct]}</b>${q.p ? `<small>💡 ${q.p}</small>` : ''}`;
+  }
+
+  document.getElementById('score-text').textContent = `Skor: ${score}`;
+  document.getElementById('next-btn').disabled = false;
+}
+
+document.getElementById('next-btn').onclick = () => {
+  current++;
+  if (current >= order.length) showResult();
+  else renderQuestion();
+};
+
+function showResult() {
+  clearInterval(timerInterval);
+  showScreen('result-screen');
+  const pct = Math.round((score / order.length) * 100);
+  document.getElementById('final-score').textContent = `${score} / ${order.length}`;
+  let msg = '';
+  if (pct >= 90) msg = '🌟 Luar biasa! Pemahaman kamu sangat bagus!';
+  else if (pct >= 70) msg = '👍 Bagus! Sedikit lagi sempurna.';
+  else if (pct >= 50) msg = '💪 Cukup baik. Terus berlatih!';
+  else msg = '📚 Jangan menyerah. Ulangi dan pelajari lagi!';
+  document.getElementById('final-detail').innerHTML =
+    `${pct}% benar<br>${msg}<br><small style="color:#999;">Mode: ${examMode ? 'Ujian' : 'Latihan'}</small>`;
+
+  const list = document.getElementById('review-list');
+  list.innerHTML = '<h3 style="margin-bottom:10px;color:#333;">Review Jawaban &amp; Penjelasan:</h3>';
+  userAnswers.forEach((ua, i) => {
+    const q = QUESTIONS[ua.qIdx];
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (ua.isCorrect ? 'correct' : 'wrong');
+    const yourAns = ua.selected === -1
+      ? '<span class="no">(tidak dijawab / waktu habis)</span>'
+      : `<span class="${ua.isCorrect ? 'ok' : 'no'}">${LABELS[ua.selected]}. ${q.o[ua.selected]}</span>`;
+    div.innerHTML = `
+      <div class="review-q">${i + 1}. ${q.q}</div>
+      <div class="review-a">
+        Jawabanmu: ${yourAns}
+        ${!ua.isCorrect ? ` | Benar: <span class="ok">${LABELS[ua.correct]}. ${q.o[ua.correct]}</span>` : ''}
+      </div>
+      ${q.p ? `<div class="review-p">💡 ${q.p}</div>` : ''}`;
+    list.appendChild(div);
+  });
+
+  saveToLeaderboard(score, order.length);
+}
+
+function getLeaderboard() {
+  try { return JSON.parse(localStorage.getItem(CONFIG.leaderboardKey)) || []; }
+  catch(e) { return []; }
+}
+function saveToLeaderboard(sc, total) {
+  const entry = {
+    score: sc, total: total,
+    pct: Math.round((sc / total) * 100),
+    mode: examMode ? 'Ujian' : 'Latihan',
+    date: new Date().toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' })
+  };
+  const lb = getLeaderboard();
+  lb.push(entry);
+  lb.sort((a, b) => b.pct - a.pct || b.score - a.score);
+  localStorage.setItem(CONFIG.leaderboardKey, JSON.stringify(lb.slice(0, CONFIG.maxLeaderboard)));
+}
+function renderLeaderboard() {
+  const lb = getLeaderboard();
+  const content = document.getElementById('lb-content');
+  if (lb.length === 0) {
+    content.innerHTML = '<p class="lb-empty">Belum ada skor tersimpan.<br>Selesaikan quiz dulu untuk masuk leaderboard!</p>';
+    return;
+  }
+  let html = '<table class="lb-table"><thead><tr><th>#</th><th>Skor</th><th>%</th><th>Mode</th><th>Tanggal</th></tr></thead><tbody>';
+  lb.forEach((e, i) => {
+    const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
+    html += `<tr><td>${medal}</td><td>${e.score}/${e.total}</td><td>${e.pct}%</td><td>${e.mode}</td><td>${e.date}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  content.innerHTML = html;
+}
+
+document.getElementById('start-normal-btn').onclick = () => startQuiz(false);
+document.getElementById('start-exam-btn').onclick = () => startQuiz(true);
+document.getElementById('restart-btn').onclick = () => startQuiz(examMode);
+document.getElementById('back-menu-btn').onclick = () => showScreen('menu-screen');
+document.getElementById('show-lb-btn').onclick = () => { renderLeaderboard(); showScreen('lb-screen'); };
+document.getElementById('lb-back-btn').onclick = () => showScreen('menu-screen');
+document.getElementById('clear-lb-btn').onclick = () => {
+  if (confirm('Hapus semua skor di leaderboard?')) {
+    localStorage.removeItem(CONFIG.leaderboardKey);
+    renderLeaderboard();
+  }
+};
+
+function updateMenuInfo() {
+  const n = QUESTIONS.length;
+  document.getElementById('menu-subtitle').textContent = `${n} Soal • Referensi IRODORI`;
+  document.getElementById('timer-badge').textContent = `⏱️ Min ${CONFIG.minTimePerQuestion}s (adaptif)`;
+}
+
+updateMenuInfo();
+showScreen('menu-screen');
+</script>
+</body>
+</html>
